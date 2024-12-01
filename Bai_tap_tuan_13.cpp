@@ -1,37 +1,40 @@
-#include <iostream>
-#include <queue>
-#include <string>
+#include <bits/stdc++.h>
 using namespace std;
-struct Customer {
-    string name;
-    int Tong_so_tien; 
-    int So_san_pham_A; 
-};
+
 int main() {
-    queue<Customer> supermarketQueue; 
-    int Tien_thu = 0; 
-    int So_san_pham_A_da_ban = 0; 
-    int n;
-    cout << "Nhap so luong khach hang: ";
-    cin >> n;
-    for (int i = 0; i < n; i++) {
-        Customer c;
-        cout << "Nhap ten khach hang: ";
-        cin >> c.name;
-        cout << "Nhap tong so tien khach hang thanh toan: ";
-        cin >> c.Tong_so_tien;
-        cout << "Nhap so luong san pham A khach hang mua: ";
-        cin >> c.So_san_pham_A;
-        supermarketQueue.push(c); 
+    map<string, int> gia;
+    gia.insert(make_pair("A", 1000));
+    gia.insert(make_pair("B", 2000));
+    gia.insert(make_pair("C", 3000));
+    gia.insert(make_pair("D", 5000));
+
+    cout << "Bang gia san pham\n";
+    cout << "Ten san pham\tGia\n";
+    for (auto i : gia) cout << i.first << "\t\t" << i.second << endl;
+
+    queue<map<string, int>> thanhtoan;
+    int kh; cout << "Nhap so luong khach hang: ";
+    cin >> kh; 
+    for (int i = 0; i < kh; i++) {
+        cout << "Khach hang " << i+1 << endl;
+        cout << "Nhap so loai san pham: ";
+        int n; cin >> n;
+        map<string, int> mp; 
+        cout << "Nhap ten san pham va so luong can mua:\n";
+        for (int i = 0; i < n; i++) {
+            string a; int x; cin.ignore(); cin >> a >> x;
+            mp[a] = x;
+        }
+        thanhtoan.push(mp);
     }
-    while (!supermarketQueue.empty()) {
-        Customer currentCustomer = supermarketQueue.front(); 
-        supermarketQueue.pop();
-        Tien_thu += currentCustomer.Tong_so_tien;
-        So_san_pham_A_da_ban += currentCustomer.So_san_pham_A;
-        cout << "Khach hang " << currentCustomer.name << " da thanh toan xong." << endl;
+
+    int tongtien = 0, soluongA = 0;
+    while (!thanhtoan.empty()){
+        map<string, int> mp = thanhtoan.front(); thanhtoan.pop();
+        for (auto i : mp) tongtien += (i.second * gia[i.first]);
+        if (mp.find("A") != mp.end()) soluongA += mp["A"];
     }
-    cout << "Tong so tien thu ngan nhan duoc: " << Tien_thu << endl;
-    cout << "Tong so luong san pham A da ban: " << So_san_pham_A_da_ban << endl;
-    return 0;
+
+    cout << "Tong tien thu duoc trong phien lam viec: " << tongtien << endl;
+    cout << "So luong san pham A da duoc ban: " << soluongA << endl;
 }
